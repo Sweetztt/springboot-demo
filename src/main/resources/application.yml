@@ -1,0 +1,63 @@
+#Jedis   在org.springframework.boot中的SpringBoot会自动管理，当时像redis这种没有就需要自己配置config
+#yml配置文件中最后一级冒号后面要加空格
+redis:
+  jedis:
+    database: 1
+    host: 127.0.0.1
+    password: 123456
+    pool:
+      #设置jedisPool的初始化，初始化jedis池，通过jedisPool.getSource()来获取jedis
+      max-active: 200
+      max-idle: 8
+      max-wait: -1
+      min-idle: 0
+    port: 6379
+    timeout: 6000
+
+#JDBC
+spring:
+  http:
+    #配置编码格式
+    encoding:
+      charset: utf-8
+      enabled: true
+  # 配置数据库信息
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/springbootdemo?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+    username: root
+    password:
+    # HKCP默认集成hikari 和druid类似的连接池  注入dataSource，隐式注入：使用jdbc/mybatis的时候自动引用
+    hikari:
+      auto-commit: true
+      connection-test-query: SELECT 1
+      connection-timeout: 30000
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      maximum-pool-size: 15
+      minimum-idle: 5
+      #记住连接池的名字DatebookHikariCP
+      pool-name: DatebookHikariCP
+      type: com.zaxxer.hikari.HikariDataSource
+
+#Mybatis
+#1、配置
+#2、扫描，@MapperScan("com.hanz.stuspringbootdemo")，注解加载主要启动类里即：StuSpringbootDemoApplication
+#3、用模板类(唯一一个不同的地方：Dao层不需要实现类了，因为springboot自动帮你组装好了)
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/*/*.xml
+  type-aliases-package: com.hanz.stuspringbootdemo
+#当项目名不一样时要改type-aliases-package这个参数
+
+
+#日志自定义配置  改了可视化，自动生成springbootdemo.log文件
+logging:
+  file: springbootdemo.log
+  path: /var/log/
+  pattern:
+    console: '%d{yyyy/MM/dd-HH:mm:ss} [%thread] %-5level %logger- %msg%n'
+    file: '%d{yyyy/MM/dd-HH:mm} [%thread] %-5level %logger- %msg%n'
+
+
+

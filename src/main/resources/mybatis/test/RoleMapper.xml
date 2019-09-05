@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hanz.stuspringbootdemo.dao.RoleMapper">
+  <resultMap id="BaseResultMap" type="com.hanz.stuspringbootdemo.domain.Role">
+    <id column="id" property="id" jdbcType="INTEGER"></id>
+    <result column="role_name" property="role_name" jdbcType="VARCHAR"></result>
+    <result column="user_id" property="user_id" jdbcType="INTEGER"></result>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id,role_name,user_id
+  </sql>
+  <insert id="insertRole" parameterType="com.hanz.stuspringbootdemo.domain.Role">
+    insert into role(id,role_name,user_id)
+    values (#{id,jdbcType=INTEGER},#{role_name,jdbcType=VARCHAR},#{user_id,jdbcType=INTEGER})
+  </insert>
+  <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from role where id=#{id,jdbcType=INTEGER}
+  </delete>
+  <update id="updateById" parameterType="com.hanz.stuspringbootdemo.domain.Role">
+    update role set role_name=#{role_name,jdbcType=VARCHAR},user_id=#{user_id,jdbcType=INTEGER}
+    where id=#{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectRoleById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from role where id=#{id,jdbcType=INTEGER}
+  </select>
+  <select id="getRoleByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from role where user_id =#{id,jdbcType=INTEGER}
+  </select>
+  <select id="getRoleByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from role where user_id in
+      (select id from user where name=#{name,jdbcType=VARCHAR})
+  </select>
+</mapper>
